@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8" />
+
+    <!-- JQuery + Inputmask -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.8/jquery.inputmask.min.js"></script>
+
+</head>
+
+<body>
+<section class="layout-content" layout:fragment="corpo">
+
+    <nav class="navbar navbar-expand-md bg-light">
+        <div class="navbar-collapse" id="navbarsExampleDefault">
+            <ul class="navbar-nav float-right">
+                <li class="nav-item active">
+                    <i class="oi oi-caret-right"></i>
+                    <span>Cadastrar Professores</span>
+                </li>
+            </ul>
+            <a class="btn btn-primary ms-1" href="/professores/listar" role="button">
+                <span class="oi oi-spreadsheet"></span>
+                <span>Listar Professores</span>
+            </a>
+        </div>
+    </nav>
+
+    <div class="container" id="cadastro">
+
+        <div th:if="${sucesso}">
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="oi oi-check"></i>
+                <strong th:text="${sucesso}"></strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        </div>
+
+        <form th:action="${professor.matricula == null} ? @{/professores/salvar} : @{/professores/editar}"
+              th:object="${professor}" method="POST" id="formProfessor">
+
+            <div th:if="${#fields.hasAnyErrors()}">
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <div th:each="error : ${#fields.detailedErrors()}">
+                        <i class="oi oi-warning"></i>
+                        <span th:text="${error.message}"></span>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="nome">Nome do Professor</label>
+                    <input type="text"
+                           class="form-control"
+                           id="nome"
+                           maxlength="40"
+                           placeholder="Nome do professor"
+                           th:field="*{nome}"
+                           th:classappend="${#fields.hasErrors('nome')} ? 'is-invalid'">
+                </div>
+
+                <div class="col-md-6">
+                    <label for="area">Área de ensino</label>
+                    <input type="text"
+                           class="form-control"
+                           id="area"
+                           maxlength="40"
+                           placeholder="Área de ensino"
+                           th:field="*{area}"
+                           th:classappend="${#fields.hasErrors('area')} ? 'is-invalid'">
+                </div>
+            </div>
+
+            <input type="hidden" id="matricula" th:field="*{matricula}" />
+
+            <button type="submit" class="btn btn-primary btn-sm mt-3">Salvar</button>
+        </form>
+
+    </div>
+
+</section>
+
+
+<script>
+    // Permitir apenas letras e espaços
+    $("#nome, #area").inputmask({
+        regex: "[A-Za-zÀ-ÿ ]{4,50}",
+        placeholder: ""
+    });
+
+    // Validação extra antes de enviar
+    document.getElementById("formProfessor").addEventListener("submit", function(e){
+        let nome = document.getElementById("nome").value.trim();
+        let area = document.getElementById("area").value.trim();
+
+        if (nome.length < 4 || nome.length > 50 ||
+            area.length < 4 || area.length > 50) {
+            alert("Nome e área devem ter entre 4 e 50 caracteres.");
+            e.preventDefault();
+        }
+    });
+</script>
+
+</body>
+</html>

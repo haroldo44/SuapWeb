@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout}" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+</head>
+<body>
+<section class="layout-content" layout:fragment="corpo">
+    <nav class="navbar navbar-expand-md bg-light">
+        <div class="navbar-collapse">
+            <ul class="navbar-nav float-right">
+                <li class="nav-item active">
+                    <i class="oi oi-caret-right"></i>
+                    <span>Matricular Aluno</span>
+                </li>
+            </ul>
+            <a class="btn btn-primary ms-1" href="/matriculas/listar">
+                <span class="oi oi-spreadsheet"></span> Histórico
+            </a>
+        </div>
+    </nav>
+    <div class="container" id="cadastro">
+        <div th:if="${sucesso}">
+            <div class="alert alert-success">
+                <i class="oi oi-check"></i>
+                <strong th:text="${sucesso}"></strong>
+            </div>
+        </div>
+        <form th:action="@{/matriculas/salvar}" th:object="${alunoMatricula}" method="POST">
+            <div class="row">
+                <div class="col-md-6">
+                    <label>Aluno</label>
+                    <select class="form-select" th:field="*{matricula}" required>
+                        <option value="">Selecione o aluno...</option>
+                        <option th:each="a : ${alunos}" th:value="${a.matricula}" th:text="${a.nome + ' - Matrícula: ' + a.matricula}"></option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label>Período</label>
+                    <input type="text" class="form-control" th:field="*{periodo}" placeholder="2024.1" required maxlength="6" pattern="\d{4}\.[1-2]" title="Use formato AAAA.1 ou AAAA.2">
+                </div>
+            </div>
+            <div class="row mt-3">
+                <label>Disciplinas:</label>
+                <div class="col-md-12">
+                    <th:block th:each="d : ${listaDisciplinas}">
+                        <div>
+                            <input type="checkbox" th:field="*{disciplinas}" th:value="${d.codigo}">
+                            <span th:text="${d.nome}"></span>
+                        </div>
+                    </th:block>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary btn-sm mt-3">Salvar</button>
+        </form>
+    </div>
+</section>
+</body>
+</html>

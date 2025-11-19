@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+
+    <!-- jQuery + Inputmask -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.8/jquery.inputmask.min.js"></script>
+
+</head>
+
+<body>
+<section class="layout-content" layout:fragment="corpo">
+
+    <nav class="navbar navbar-expand-md bg-light">
+        <div class="navbar-collapse">
+            <ul class="navbar-nav float-right">
+                <li class="nav-item active">
+                    <i class="oi oi-caret-right"></i>
+                    <span>Cadastrar Cursos</span>
+                </li>
+            </ul>
+            <a class="btn btn-primary ms-1" href="/cursos/listar" role="button">
+                <span class="oi oi-spreadsheet"></span>
+                <span>Listar Cursos</span>
+            </a>
+        </div>
+    </nav>
+
+    <div class="container" id="cadastro">
+
+        <div th:if="${sucesso}">
+            <div class="alert alert-success alert-dismissible show">
+                <i class="oi oi-check"></i>
+                <strong th:text="${sucesso}"></strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        </div>
+
+        <form th:action="${curso.codigo == null} ? @{/cursos/salvar} : @{/cursos/editar}"
+              th:object="${curso}" method="POST">
+
+            <!-- Exibição de erros -->
+            <div th:if="${#fields.hasAnyErrors()}">
+                <div class="alert alert-danger alert-dismissible fade show">
+                    <div th:each="error : ${#fields.detailedErrors()}">
+                        <i class="oi oi-warning"></i>
+                        <span th:text="${error.message}"></span>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            </div>
+
+            <div class="grid">
+                <div class="row">
+
+                    <!-- Nome do curso -->
+                    <div class="col-md-6">
+                        <label for="nome">Nome do curso</label>
+                        <input type="text"
+                               class="form-control"
+                               id="nome"
+                               placeholder="Nome do curso"
+                               th:field="*{nome}"
+                               th:classappend="${#fields.hasErrors('nome')} ? 'is-invalid'" />
+                    </div>
+
+                    <!-- Área do curso -->
+                    <div class="col-md-6">
+                        <label for="area">Área do curso</label>
+                        <input type="text"
+                               class="form-control"
+                               id="area"
+                               placeholder="Área do curso"
+                               th:field="*{area}"
+                               th:classappend="${#fields.hasErrors('area')} ? 'is-invalid'" />
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- campo escondido do ID -->
+            <input type="hidden" th:field="*{codigo}" />
+
+            <button type="submit" class="btn btn-primary btn-sm mt-1">Salvar</button>
+        </form>
+    </div>
+
+</section>
+
+<!-- MÁSCARAS PARA OS CAMPOS -->
+<script>
+    // Mascara somente letras (nome e área)
+    $("#nome").inputmask({
+        regex: "[A-Za-zÀ-ÿ ]{3,50}",
+        placeholder: ""
+    });
+
+    $("#area").inputmask({
+        regex: "[A-Za-zÀ-ÿ ]{3,50}",
+        placeholder: ""
+    });
+</script>
+
+</body>
+</html>

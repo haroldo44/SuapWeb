@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8" />
+</head>
+
+<body>
+<section class="layout-content" layout:fragment="corpo">
+
+    <nav class="navbar navbar-expand-md bg-light">
+        <div class="navbar-collapse">
+            <ul class="navbar-nav float-right">
+                <li class="nav-item active">
+                    <i class="oi oi-caret-right"></i>
+                    <span>Cadastrar Servidor</span>
+                </li>
+            </ul>
+
+            <a class="btn btn-primary ms-1" href="/servidores/listar" role="button">
+                <span class="oi oi-spreadsheet"></span>
+                <span>Listar Servidores</span>
+            </a>
+        </div>
+    </nav>
+
+    <div class="container" id="cadastro">
+
+        <div th:if="${sucesso}">
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="oi oi-check"></i>
+                <strong th:text="${sucesso}"></strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        </div>
+
+        <form th:action="@{/servidores/salvar}" th:object="${servidor}" method="POST" id="formServidor">
+
+            <div th:if="${#fields.hasAnyErrors()}">
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <div th:each="error : ${#fields.detailedErrors()}">
+                        <i class="oi oi-warning"></i>
+                        <span th:text="${error.message}"></span>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="nome">Nome do Servidor</label>
+					<input type="text" class="form-control"
+					       id="nome"
+					       maxlength="50"
+					       placeholder="Nome do servidor"
+					       th:field="*{nome}"
+					       oninput="apenasLetras(this)"
+					       th:classappend="${#fields.hasErrors('nome')} ? 'is-invalid'">
+                </div>
+            </div>
+
+            <div class="form-row mt-2">
+                <div class="form-group col-md-6">
+                    <label for="area">Área do Servidor</label>
+					<input type="text" class="form-control"
+					       id="area"
+					       maxlength="50"
+					       placeholder="Área do servidor"
+					       th:field="*{area}"
+					       oninput="apenasLetras(this)"
+					       th:classappend="${#fields.hasErrors('area')} ? 'is-invalid'">
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-sm mt-3">Salvar</button>
+        </form>
+
+    </div>
+
+</section>
+
+<script>
+    // Permite apenas letras e espaço
+    function apenasLetras(campo) {
+        campo.value = campo.value.replace(/[^A-Za-zÀ-ÿ\s]/g, "");
+    }
+
+    // Validação extra antes de enviar
+    document.getElementById("formServidor").addEventListener("submit", function(e){
+        let nome = document.getElementById("nome").value.trim();
+        let area = document.getElementById("area").value.trim();
+
+        if (nome.length < 4 || area.length < 4) {
+            alert("Nome e área devem conter ao menos 4 letras.");
+            e.preventDefault();
+        }
+    });
+</script>
+
+</body>
+</html>

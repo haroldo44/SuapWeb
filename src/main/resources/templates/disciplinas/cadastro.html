@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout}" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+
+<!-- jQuery + Inputmask -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.8/jquery.inputmask.min.js"></script>
+
+</head>
+
+<body>
+<section class="layout-content" layout:fragment="corpo">
+
+	<nav class="navbar navbar-expand-md bg-light">
+		<div class="navbar-collapse">
+			<ul class="navbar-nav float-right">
+				<li class="nav-item active">
+					<i class="oi oi-caret-right"></i>
+					<span>Cadastrar Disciplinas</span>
+				</li>
+			</ul>
+			<a class="btn btn-primary ms-1" href="/disciplinas/listar">
+				<span class="oi oi-spreadsheet"></span>
+				Listar Disciplinas
+			</a>
+		</div>
+	</nav>
+
+	<div class="container" id="cadastro">
+
+		<div th:if="${sucesso}">
+			<div class="alert alert-success alert-dismissible show">
+				<i class="oi oi-check"></i>
+				<strong th:text="${sucesso}"></strong>
+				<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+			</div>
+		</div>
+
+		<form th:action="${disciplina.codigo == null} ? @{/disciplinas/salvar} : @{/disciplinas/editar}"
+			  th:object="${disciplina}" method="POST">
+
+			<div th:if="${#fields.hasAnyErrors()}">
+				<div class="alert alert-danger alert-dismissible fade show">
+					<div th:each="error : ${#fields.detailedErrors()}">
+						<i class="oi oi-warning"></i>
+						<span th:text="${error.message}"></span>
+					</div>
+					<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+				</div>
+			</div>
+
+			<div class="row">
+
+				<div class="col-md-6">
+					<label for="nome">Nome da disciplina</label>
+					<input type="text" class="form-control" id="nome"
+						   th:field="*{nome}"
+						   placeholder="Digite o nome"
+						   th:classappend="${#fields.hasErrors('nome')} ? 'is-invalid'" />
+				</div>
+
+				<div class="col-md-6">
+					<label for="carga_horaria">Carga Horária</label>
+					<input type="text" class="form-control" id="carga_horaria"
+						   th:field="*{carga_horaria}"
+						   placeholder="Ex: 60"
+						   th:classappend="${#fields.hasErrors('carga_horaria')} ? 'is-invalid'" />
+				</div>
+
+			</div>
+
+			<div class="row">
+
+				<div class="col-md-6">
+					<label for="professores">Professor</label>
+					<select id="professores" class="form-select" th:field="*{professor}"
+							th:classappend="${#fields.hasErrors('professor')} ? 'is-invalid'">
+						<option value="">Selecione...</option>
+						<option th:each="p : ${professores}" th:value="${p.matricula}"
+								th:text="${p.nome}">
+						</option>
+					</select>
+				</div>
+
+				<div class="col-md-6">
+					<label for="cursos">Curso</label>
+					<select id="cursos" class="form-select" th:field="*{curso}"
+							th:classappend="${#fields.hasErrors('curso')} ? 'is-invalid'">
+						<option value="">Selecione...</option>
+						<option th:each="c : ${cursos}" th:value="${c.codigo}"
+								th:text="${c.nome}">
+						</option>
+					</select>
+				</div>
+
+			</div>
+
+			<input type="hidden" th:field="*{codigo}" />
+
+			<button type="submit" class="btn btn-primary btn-sm mt-2">Salvar</button>
+
+		</form>
+
+	</div>
+
+</section>
+
+<script>
+	// Nome: letras e acentos
+	$("#nome").inputmask({
+		regex: "[A-Za-zÀ-ÿ ]{3,60}",
+		placeholder: ""
+	});
+
+	// Carga horária: 2 a 3 dígitos
+	$("#carga_horaria").inputmask({
+		regex: "[0-9]{2,3}",
+		placeholder: ""
+	});
+</script>
+
+</body>
+</html>
