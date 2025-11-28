@@ -56,7 +56,7 @@
         </a></li>
     </ul>
 
-    <ul class="nav nav-pills ">
+    <ul class="nav nav-pills " sec:authorize="hasAnyAuthority('ADMIN', 'COORDENADOR')">
         <li class="nav-item "><span class="nav-link active ">Servidores</span></li>
         <li class="nav-item "><a class="nav-link "
             href="/servidores/cadastrar"> <i class="oi oi-plus "></i>

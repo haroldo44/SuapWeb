@@ -100,6 +100,10 @@ public class SecurityConfig {
                 ).hasAnyAuthority(ADMIN, PROFESSOR)
                 
                 .requestMatchers(
+                        antMatcher("/servidores/**")
+                ).hasAnyAuthority(ADMIN, COORDENADOR)
+                
+                .requestMatchers(
                 		antMatcher("/home")
                 ).hasAnyAuthority(ADMIN, COORDENADOR, PROFESSOR, ESTUDANTE)
                 .requestMatchers(
