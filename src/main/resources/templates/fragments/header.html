@@ -4,19 +4,33 @@
 <meta charset="UTF-8">
 </head>
 <body>
-	<header th:fragment="cabecalho">
-		<nav
-			class="navbar navbar-inverse navbar navbar-dark bg-dark fixed-top ">
-			<div class="container-fluid ">
-				<div class="navbar-header ">
-					<button type="button"
-						class="btn btn-dark navbar-toggle pull-left ">
-						<i class="oi oi-menu "></i>
-					</button>
-					<a class="navbar-brand  navbar-toggle pull-left" href="# ">SUAPdoSertaoWEB - Cadastro</a>
-				</div>
-			</div>
-		</nav>
-	</header>
+    <header th:fragment="cabecalho">
+        <nav class="navbar navbar-inverse navbar navbar-dark bg-dark fixed-top">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="btn btn-dark navbar-toggle pull-left">
+                        <i class="oi oi-menu"></i>
+                    </button>
+                    <a class="navbar-brand navbar-toggle pull-left" href="#">SUAPdoSertaoWEB - Cadastro</a>
+                </div>
+
+                <!-- Formulário de logout visível apenas para usuários autenticados -->
+                <div sec:authorize="isAuthenticated()">
+                    <form action="/logout" method="post" class="form-inline my-2 my-lg-0">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-danger dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+							    <span class="sr-only">Toggle Dropdown</span>
+							</button>
+
+                            <div class="dropdown-menu">
+                                <button type="submit" class="dropdown-item">Sair</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </nav>
+    </header>
 </body>
 </html>

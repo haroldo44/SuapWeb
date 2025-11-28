@@ -7,7 +7,7 @@
         </a></li>
     </ul>
 
-    <ul class="nav nav-pills ">
+    <ul class="nav nav-pills " sec:authorize="hasAnyAuthority('ADMIN', 'COORDENADOR')">
         <li class="nav-item "><span class="nav-link active ">Cursos</span></li>
         <li class="nav-item "><a class="nav-link " href="/cursos/cadastrar">
                 <i class="oi oi-plus "></i> <span>Cadastrar</span>
@@ -17,7 +17,7 @@
         </a></li>
     </ul>
 
-    <ul class="nav nav-pills ">
+    <ul class="nav nav-pills " sec:authorize="hasAnyAuthority('ADMIN', 'PROFESSOR')">
         <li class="nav-item "><span class="nav-link active ">Professores</span></li>
         <li class="nav-item "><a class="nav-link " href="/professores/cadastrar">
                 <i class="oi oi-plus "></i> <span>Cadastrar</span>
@@ -27,7 +27,7 @@
         </a></li>
     </ul>
 
-    <ul class="nav nav-pills ">
+    <ul class="nav nav-pills " sec:authorize="hasAnyAuthority('ADMIN', 'COORDENADOR')">
         <li class="nav-item "><span class="nav-link active ">Disciplinas</span></li>
         <li class="nav-item "><a class="nav-link " href="/disciplinas/cadastrar">
                 <i class="oi oi-plus "></i> <span>Cadastrar</span>
@@ -40,7 +40,7 @@
 
 	
 
-    <ul class="nav nav-pills ">
+    <ul class="nav nav-pills " sec:authorize="hasAnyAuthority('ADMIN', 'ESTUDANTE')">
         <li class="nav-item "><span class="nav-link active ">Alunos</span></li>
         <li class="nav-item "><a class="nav-link " href="/alunos/cadastrar">
                 <i class="oi oi-plus "></i> <span>Cadastrar</span>
