@@ -57,8 +57,20 @@ public class CursoController {
 
     @GetMapping("/excluir/{codigo}")
     public String excluir(@PathVariable("codigo") Long codigo, ModelMap model) {
-        cursoService.deletarCursoporID(codigo);
-        model.addAttribute("sucesso", "Curso excluído com sucesso!");
+        // CORRIGIDO: mudando 'p' e 'i' para 'P' e 'I' maiúsculos
+        String retorno = cursoService.deletarCursoPorID(codigo); 
+        
+        // Como o método retorna String (sucesso ou erro), você deve usar essa string
+        // para decidir a mensagem na ModelMap. Exemplo:
+        if (retorno.contains("sucesso")) {
+            model.addAttribute("sucesso", retorno);
+        } else {
+            model.addAttribute("erro", retorno);
+        }
+
+        // O método deletarCursoPorID retorna a String de sucesso ou erro (do seu código anterior)
+        // model.addAttribute("sucesso", "Curso excluído com sucesso!"); // Pode ser removido/adaptado
+        
         return listar(model);
     }
 }

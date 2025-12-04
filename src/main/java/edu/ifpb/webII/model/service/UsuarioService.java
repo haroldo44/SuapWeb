@@ -51,11 +51,12 @@ public class UsuarioService implements UserDetailsService {
         // ==========================================================
         // RETORNA O USER DO SPRING SECURITY
         // ==========================================================
-        return new User(
+        User userSpring = new User(
                 usuario.getUsername(),
                 usuario.getSenha(),
                 AuthorityUtils.createAuthorityList(getAuthorities(usuario.getPerfis()))
         );
+        return userSpring;
     }
 
 
